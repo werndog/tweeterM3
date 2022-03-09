@@ -1,94 +1,39 @@
 package edu.byu.cs.tweeter.client.presenter;
 
-import android.util.Log;
-
-import edu.byu.cs.tweeter.client.cache.Cache;
 import edu.byu.cs.tweeter.client.model.service.UserService;
-import edu.byu.cs.tweeter.model.domain.AuthToken;
-import edu.byu.cs.tweeter.model.domain.User;
-import edu.byu.cs.tweeter.model.net.request.LoginRequest;
 
-/**
- * The presenter for the login functionality of the application.
- */
-public class LoginPresenter implements UserService.LoginObserver {
+public class LoginPresenter extends Presenter {
 
-    private static final String LOG_TAG = "LoginPresenter";
+    private UserService userService;
 
-    private final View view;
-
-    /**
-     * The interface by which this presenter communicates with it's view.
-     */
-    public interface View {
-        void loginSuccessful(User user, AuthToken authToken);
-        void loginUnsuccessful(String message);
-    }
-
-    /**
-     * Creates an instance.
-     *
-     * @param view the view for which this class is the presenter.
-     */
     public LoginPresenter(View view) {
-        // An assertion would be better, but Android doesn't support Java assertions
-        if(view == null) {
-            throw new NullPointerException();
+        super(view);
+        userService = new UserService();
+    }
+
+    public void logIn(String alias, String password) {
+        try {
+            validateLogin(alias, password);
+            userService.logIn(alias, password, new GetUserObserver());
+        } catch (Exception e) {
+            throw e;
         }
-        this.view = view;
     }
 
-    /**
-     * Initiates the login process.
-     *
-     * @param username the user's username.
-     * @param password the user's password.
-     */
-    public void initiateLogin(String username, String password) {
-        UserService userService = new UserService();
-        LoginRequest loginRequest = new LoginRequest(username, password);
-        userService.login(username, password, this);
+    public void validateLogin(String alias, String password) {
+        if (alias.charAt(0) != '@') {
+            throw new IllegalArgumentException("Alias must begin with @.");
+        }
+        if (alias.length() < 2) {
+            throw new IllegalArgumentException("Alias must contain 1 or more characters after the @.");
+        }
+        if (password.length() == 0) {
+            throw new IllegalArgumentException("Password cannot be empty.");
+        }
     }
 
-    /**
-     * Invoked when the login request completes if the login was successful. Notifies the view of
-     * the successful login.
-     *
-     * @param user the logged-in user.
-     * @param authToken the session auth token.
-     */
     @Override
-    public void handleSuccess(User user, AuthToken authToken) {
-        // Cache user session information
-        Cache.getInstance().setCurrUser(user);
-        Cache.getInstance().setCurrUserAuthToken(authToken);
-
-        view.loginSuccessful(user, authToken);
-    }
-
-    /**
-     * Invoked when the login request completes if the login request was unsuccessful. Notifies the
-     * view of the unsuccessful login.
-     *
-     * @param message error message.
-     */
-    @Override
-    public void handleFailure(String message) {
-        String errorMessage = "Failed to login: " + message;
-        Log.e(LOG_TAG, errorMessage);
-        view.loginUnsuccessful(errorMessage);
-    }
-
-    /**
-     * A callback indicating that an exception occurred in an asynchronous method this class is
-     * observing.
-     *
-     * @param exception the exception.
-     */
-    @Override
-    public void handleException(Exception exception) {
-        String errorMessage = "Failed to login because of exception: " + exception.getMessage();
-        Log.e(LOG_TAG, errorMessage, exception);
-        view.loginUnsuccessful(errorMessage);
+    protected String getMessagePrefix() {
+        return "Failed to login";
     }
 }
