@@ -1,9 +1,17 @@
 package edu.byu.cs.tweeter.server.service;
 
+import edu.byu.cs.tweeter.model.net.request.CountRequest;
+import edu.byu.cs.tweeter.model.net.request.FollowRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowersRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
+import edu.byu.cs.tweeter.model.net.request.IsFollowerRequest;
+import edu.byu.cs.tweeter.model.net.request.UnfollowRequest;
+import edu.byu.cs.tweeter.model.net.response.CountResponse;
+import edu.byu.cs.tweeter.model.net.response.FollowResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowersResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
+import edu.byu.cs.tweeter.model.net.response.IsFollowerResponse;
+import edu.byu.cs.tweeter.model.net.response.UnfollowResponse;
 import edu.byu.cs.tweeter.server.dao.FollowDAO;
 
 /**
@@ -36,6 +44,29 @@ public class FollowService {
             throw new RuntimeException("[BadRequest] Request needs to have a positive limit");
         }
         return getFollowingDAO().getFollowers(request);
+    }
+
+    public IsFollowerResponse isFollower(IsFollowerRequest request) {
+        if(request.getFolloweeAlias() == null) {
+            throw new RuntimeException("[BadRequest] Request needs to have a followee alias");
+        }
+        return getFollowingDAO().isFollower(request);
+    }
+
+    public CountResponse getFollowerCount(CountRequest request) {
+        return getFollowingDAO().getFollowerCount(request);
+    }
+
+    public CountResponse getFolloweeCount(CountRequest request) {
+        return getFollowingDAO().getFolloweeCount(request);
+    }
+
+    public FollowResponse follow(FollowRequest request) {
+        return getFollowingDAO().follow(request);
+    }
+
+    public UnfollowResponse unfollow(UnfollowRequest request) {
+        return getFollowingDAO().unfollow(request);
     }
 
     /**

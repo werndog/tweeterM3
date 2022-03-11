@@ -18,16 +18,6 @@ import edu.byu.cs.tweeter.model.domain.User;
 
 public class UserService {
 
-    private ServerFacade serverFacade;
-
-    ServerFacade getServerFacade() {
-        if(serverFacade == null) {
-            serverFacade = new ServerFacade();
-        }
-
-        return serverFacade;
-    }
-
     public void getUser(String userAlias, SingleItemObserver<User> getUserObserver) {
         GetUserTask getUserTask = new GetUserTask(Cache.getInstance().getCurrUserAuthToken(),
                 userAlias, new GetUserHandler(getUserObserver));

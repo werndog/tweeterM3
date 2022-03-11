@@ -48,6 +48,5 @@ public class GetFollowingTask extends PagedTask<User> {
             Log.e(LOG_TAG, "Failed to get followees", ex);
             sendExceptionMessage(ex);
         }
-//        return getFakeData().getPageOfUsers((User) getLastItem(), getLimit(), getTargetUser());
     }
 }

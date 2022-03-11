@@ -3,9 +3,13 @@ package edu.byu.cs.tweeter.server.service;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.LoginRequest;
+import edu.byu.cs.tweeter.model.net.request.LogoutRequest;
 import edu.byu.cs.tweeter.model.net.request.RegisterRequest;
+import edu.byu.cs.tweeter.model.net.request.UserRequest;
 import edu.byu.cs.tweeter.model.net.response.LoginResponse;
+import edu.byu.cs.tweeter.model.net.response.LogoutResponse;
 import edu.byu.cs.tweeter.model.net.response.RegisterResponse;
+import edu.byu.cs.tweeter.model.net.response.UserResponse;
 import edu.byu.cs.tweeter.util.FakeData;
 
 public class UserService {
@@ -40,6 +44,19 @@ public class UserService {
         User user = getDummyUser();
         AuthToken authToken = getDummyAuthToken();
         return new RegisterResponse(user, authToken);
+    }
+
+    public UserResponse getUser(UserRequest request) {
+        if(request.getUsername() == null) {
+            throw new RuntimeException("[BadRequest] Missing a username");
+        }
+
+        User user = getFakeData().findUserByAlias(request.getUsername());
+        return new UserResponse(user);
+    }
+
+    public LogoutResponse logout(LogoutRequest request) {
+        return new LogoutResponse();
     }
 
     /**

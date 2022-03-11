@@ -34,7 +34,6 @@ public class GetStoryTask extends PagedTask<Status> {
     protected void runTask(ServerFacade serverFacade) {
         try {
             String targetUserAlias = targetUser == null ? null : targetUser.getAlias();
-            Status lastStatus = lastItem == null ? null : lastItem;
 
             StoryRequest request = new StoryRequest(authToken, targetUserAlias, limit, getLastItem());
             StoryResponse response = getServerFacade().getStory(request, URL_PATH);

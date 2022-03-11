@@ -50,6 +50,5 @@ public class LoginTask extends StartupTask {
             Log.e(LOG_TAG, ex.getMessage(), ex);
             sendExceptionMessage(ex);
         }
-
     }
 }

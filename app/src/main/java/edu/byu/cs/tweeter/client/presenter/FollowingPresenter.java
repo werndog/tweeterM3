@@ -22,4 +22,8 @@ public class FollowingPresenter extends PagedPresenter<User>{
     protected String getMessagePrefix() {
         return "Failed to get following";
     }
+
+    public FollowService getFollowService() {
+        return followService;
+    }
 }

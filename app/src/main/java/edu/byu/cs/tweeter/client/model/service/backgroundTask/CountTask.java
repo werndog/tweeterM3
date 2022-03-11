@@ -9,12 +9,12 @@ import edu.byu.cs.tweeter.model.domain.User;
 public abstract class CountTask extends AuthenticatedTask {
 
     public static final String COUNT_KEY = "count";
-    private int count = 20;
+    protected int count;
     /**
      * The user whose follower count is being retrieved.
      * (This can be any user, not just the currently logged-in user.)
      */
-    private User targetUser;
+    protected User targetUser;
 
     public CountTask(Handler messageHandler, AuthToken authToken, User targetUser) {
         super(messageHandler, authToken);

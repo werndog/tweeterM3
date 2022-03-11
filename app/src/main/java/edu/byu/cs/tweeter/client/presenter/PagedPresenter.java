@@ -9,7 +9,7 @@ import edu.byu.cs.tweeter.model.domain.User;
 public abstract class PagedPresenter<T> extends Presenter {
     protected static final int PAGE_SIZE = 10;
     private T lastItem;
-    private boolean hasMorePages;
+    private boolean hasMorePages = true;
     private boolean isLoading = false;
     private View view;
     private UserService userService;
@@ -25,7 +25,6 @@ public abstract class PagedPresenter<T> extends Presenter {
     public boolean isLoading() {
         return isLoading;
     }
-
 
     public interface View<T> extends Presenter.View {
         void setLoadingFooter(boolean b);
@@ -70,6 +69,10 @@ public abstract class PagedPresenter<T> extends Presenter {
             view.setLoadingFooter(false);
             view.displayErrorMessage(getMessagePrefix() + " because of exception: " + exception.getMessage());
         }
+    }
+
+    public T getLastItem() {
+        return lastItem;
     }
 
     public void getUser(String alias) {

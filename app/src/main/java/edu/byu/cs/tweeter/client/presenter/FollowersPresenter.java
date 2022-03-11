@@ -13,6 +13,9 @@ public class FollowersPresenter extends PagedPresenter<User>{
         this.followService = new FollowService();
     }
 
+    public FollowService getFollowService() {
+        return followService;
+    }
 
     @Override
     protected void getItems(User user, User lastItem) {

@@ -18,6 +18,10 @@ public class RegisterPresenter extends Presenter {
         userService = new UserService();
     }
 
+    public UserService getUserService() {
+        return userService;
+    }
+
     public void registerUser(String firstName, String lastName, String alias, String password, ImageView imageToUpload) {
         try {
             validateRegistration(firstName, lastName, alias, password, imageToUpload);
